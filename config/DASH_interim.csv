@@ -1,0 +1,2 @@
+spectrum,pred_z,Best_class,Best_prob,Ia_prob,Ibc_prob,II_prob,SL_prob,Non_prob,Other_prob,Classifier
+sbIb_Smag19.186Gmag19.819z0.069973texp20.022.txt,0.092,Ibc,0.9983553441867807,6.904501855893807e-06,0.9983553441867807,0.0016377513113633177,0.0,0.0,0.0,DASH

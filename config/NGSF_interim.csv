@@ -1,0 +1,2 @@
+spectrum,pred_z,Best_class,Best_prob,Ia_prob,Ibc_prob,II_prob,SL_prob,Non_prob,Other_prob,Classifier
+sbIb_Smag19.186Gmag19.819z0.069973texp20.022_binned.txt,0.092,Ibc,0.5561591249247755,0.0,0.5561591249247755,0.1113117234144364,0.2215845552704412,0.0,0.11094459639034693,NGSF
