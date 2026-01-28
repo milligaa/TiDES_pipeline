@@ -4,7 +4,6 @@ import argparse
 
 def concatenate(pto, pts, sp):
     import glob
-    import numpy as np
     from astropy.table import Table
     from astropy.io import ascii
     import math
@@ -69,15 +68,15 @@ def concatenate(pto, pts, sp):
             index = output_names.index(spectra_names[c])
             #open the file by construncting the filename from the output name
             filename = str(pto) + str(output_names[index]) + '_snid.output'
-            
+
             with open(filename) as f:
                 file = f.readlines()
 
             prob_dict = {'Ia':0, 'Ibc':0, 'II':0, 'SL':0, 'Non':0, 'other':0}
-            
+
             #file is open, search for line at start of results and get index, first three results are the three subsequent indexes
             res_begin_index = file.index(file_line_search_str)
-            
+
             for i in range(len(file) - (res_begin_index+1)):
                     result = file[res_begin_index + 1 + i].split()
                     if len(result) == 10:
@@ -93,7 +92,7 @@ def concatenate(pto, pts, sp):
                                 continue
                     else:
                         break
-                
+
             best_class.append(max(prob_dict, key=prob_dict.get))
             best_prob.append(max(prob_dict.values()) / sum(prob_dict.values()))
             Ia_prob.append(prob_dict['Ia'] / sum(prob_dict.values()))
@@ -102,8 +101,8 @@ def concatenate(pto, pts, sp):
             SL_prob.append(prob_dict['SL'] / sum(prob_dict.values()))
             Non_prob.append(prob_dict['Non'] / sum(prob_dict.values()))
             Other_prob.append(prob_dict['other'] / sum(prob_dict.values()))
-        
-        
+
+
         except Exception as e:
             print(e)
             best_class.append('other')
@@ -114,7 +113,7 @@ def concatenate(pto, pts, sp):
             SL_prob.append(0)
             Non_prob.append(0)
             Other_prob.append(0)
-        
+
 
     #now save the results
     saving_table = Table()
@@ -130,7 +129,8 @@ def concatenate(pto, pts, sp):
     saving_table['Other_prob'] = Other_prob
     saving_table['Classifier'] = ['SNID']
 
-    ascii.write(saving_table, sp, format='csv', delimiter = ',', overwrite=True)
+    #ascii.write(saving_table, sp, format='csv', delimiter = ',', overwrite=True)
+    return saving_table
 
 def parser():
 

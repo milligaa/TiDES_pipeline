@@ -1,8 +1,6 @@
 #this program takes the results from superfit and concatenates the best result from each into a single csv file
 
-from astropy.io import ascii
 from astropy.table import Table
-import glob
 from scipy import stats
 import argparse
 import numpy as np
@@ -47,7 +45,7 @@ def concatenate(csv_path, save_path):
         texp = int(spec.find('texp'))
         z = int(spec.find('z'))
 
-        
+
         prob_dict = {'Ia':0, 'Ibc':0, 'II':0, 'SL':0, 'Non':0, 'other':0}
 
         max_chi = max(table['CHI2/dof'])
@@ -80,7 +78,7 @@ def concatenate(csv_path, save_path):
                     continue
 
             # print(prob_dict)
-        
+
         Ia_prob.append(prob_dict['Ia']/ sum(prob_dict.values()))
         Ibc_prob.append(prob_dict['Ibc']/ sum(prob_dict.values()))
         II_prob.append(prob_dict['II']/ sum(prob_dict.values()))
@@ -99,14 +97,14 @@ def concatenate(csv_path, save_path):
                  Ia_prob,Ibc_prob,II_prob,SL_prob,Non_prob,Other_prob, ['NGSF']]
     variable_strs = ['spectrum','pred_z','Best_class','Best_prob','Ia_prob',
                      'Ibc_prob','II_prob','SL_prob','Non_prob','Other_prob', 'Classifier']
-    
+
     for i in range(len(variables)):
         final_res_table[variable_strs[i]] = variables[i]
 
-    ascii.write(final_res_table, save_path, format='csv', overwrite=True)
+    #ascii.write(final_res_table, save_path, format='csv', overwrite=True)
 
     print('NGSF_output.py Complete!')
-
+    return(final_res_table)
 
 def parser():
     parser = argparse.ArgumentParser(description=__doc__)

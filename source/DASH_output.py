@@ -1,9 +1,8 @@
-import astrodash
 from astropy.table import Table
 from astropy.io import ascii
 import argparse
 
-def DASH(spectrum, redshift, filesave_path):
+def DASH(spectrum, redshift, filesave_path, dash_class=None):
 
     print(f'Beginning DASH classification for {spectrum}')
 
@@ -21,7 +20,7 @@ def DASH(spectrum, redshift, filesave_path):
     spec_fit.append(spectrum)
     z_fit = []
     z_fit.append(float(redshift))
-        
+
     best_class = []
     best_prob = []
     Ia_prob = []
@@ -32,10 +31,12 @@ def DASH(spectrum, redshift, filesave_path):
     Other_prob = []
 
     # Classify all spectra
-    classification = astrodash.Classify(spec_fit, z_fit, classifyHost=False, knownZ=True, smooth=6, rlapScores = True)
-    bestFits, Redshifts, bestTypes, rlapFlag, matchesFlag, redshiftErrs = classification.list_best_matches(n=100)
+    #classification = astrodash.Classify(spec_fit, z_fit, classifyHost=False, knownZ=True, smooth=6, rlapScores = True)
+    #bestFits, Redshifts, bestTypes, rlapFlag, matchesFlag, redshiftErrs = classification.list_best_matches(n=100)
 
-    for i in bestFits:
+    dash_table = Table.read(dash_class, format='ascii')
+
+    for i in dash_table['bestFits']:
         prob_dict = {'Ia':0, 'Ibc':0, 'II':0, 'SL':0, 'Non':0, 'other':0}
         for j in i:
             sn_class = j[1]
@@ -57,7 +58,7 @@ def DASH(spectrum, redshift, filesave_path):
 
     comb_table = Table()
     comb_table['spectrum'] = spec_name
-    comb_table['pred_z'] = Redshifts
+    comb_table['pred_z'] = dash_table['Redshifts']
     comb_table['Best_class'] = best_class
     comb_table['Best_prob'] = best_prob
     comb_table['Ia_prob'] = Ia_prob
@@ -68,10 +69,10 @@ def DASH(spectrum, redshift, filesave_path):
     comb_table['Other_prob'] = Other_prob
     comb_table['Classifier'] = ['DASH']
 
-    ascii.write(comb_table, 'config/DASH_interim.csv', overwrite = True, format = 'csv')
+    #ascii.write(comb_table, 'config/DASH_interim.csv', overwrite = True, format = 'csv')
 
     print('Dash classification complete, probably')
-
+    return comb_table
 
 def parser():
     parser = argparse.ArgumentParser(description=__doc__)

@@ -3,11 +3,14 @@ from astropy.table import Table, vstack
 import astropy.units as u
 from astropy.io import ascii
 import argparse
+import SNID_output
+import NGSF_output
+import DASH_output
 
 def rband_mag(spectrum):
 
     spec=Table.read(spectrum, format = 'ascii.no_header', delimiter = ' ')
-    lam = spec['col1'] 
+    lam = spec['col1']
     intens = spec['col2']
 
     wavelength = lam * u.nm / 10
@@ -23,21 +26,25 @@ def rband_mag(spectrum):
     else:
         return False
 
-def pipeline(config_path, spec):
+def pipeline(paths, spec):
 
-    dash_res = Table.read(config_path+'/DASH_interim.csv', format='csv', delimiter=',')
-    ngsf_res = Table.read(config_path+'/NGSF_interim.csv', format='csv', delimiter=',')
-    snid_res = Table.read(config_path+'/SNID_interim.csv', format='csv', delimiter=',')
+    #dash_res = Table.read(config_path+'/DASH_interim.csv', format='csv', delimiter=',')
+    #ngsf_res = Table.read(config_path+'/NGSF_interim.csv', format='csv', delimiter=',')
+    #snid_res = Table.read(config_path+'/SNID_interim.csv', format='csv', delimiter=',')
+
+    dash_res = paths['dash']
+    ngsf_res = NGSF_output.concatenate(csv_path=paths['NGSF'], save_path=None)
+    snid_res = SNID_output.concatenate(pto=paths['SNID'], pts=spec, sp=None)
 
     combined_results = vstack([dash_res,ngsf_res,snid_res])
-    ascii.write(combined_results, 'results/'+str(snid_res['spectrum'][0])+'.csv', 
+    ascii.write(combined_results, 'results/'+str(snid_res['spectrum'][0])+'.csv',
                 format='csv', delimiter=',', overwrite=True)
-    
+
     pipeline_class = 'Placeholder'
     if dash_res['Best_class'][0] in ['Ia', 'II']:
         if ngsf_res['Best_class'][0] == dash_res['Best_class'][0]:
             pipeline_class = ngsf_res['Best_class'][0]
-        elif rband_mag(spec) == True:
+        elif rband_mag(spec) is True:
             print(ngsf_res['Best_class'][0])
             pipeline_class = ngsf_res['Best_class'][0]
     else:
