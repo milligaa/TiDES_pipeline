@@ -14,7 +14,10 @@ NGSF_URL=''
 def run_snid(spectrum:str):
     print(f"Running SNID on {spectrum}")
 
-    payload = {"spectrum": spectrum}
+    payload = {
+            "spectrum": spectrum,
+            "output_dir": "/snid_api_runs" #TODO: set complete path
+               }
 
     try:
         response = requests.post(
@@ -36,7 +39,11 @@ def run_snid(spectrum:str):
 def run_dash(spectrum:str, redshift:float):
     print(f"Running Dash on {spectrum}")
 
-    payload = {"spectrum": spectrum, "redshift": redshift}
+    payload = {
+            "spectrum": spectrum,
+            "redshift": redshift,
+            "output_dir": "/ngsf_api_run" #TODO: set complete path
+            }
 
     try:
         response = requests.post(
@@ -57,7 +64,11 @@ def run_dash(spectrum:str, redshift:float):
 def run_ngsf(spectrum:str, redshift:float):
     print(f"Running NGSF on {spectrum}")
 
-    payload = {"spectrum": spectrum, "z": redshift}
+    payload = {
+            "spectrum": spectrum,
+            "z": redshift,
+            "output_dir": "/dash_api_runs" #TODO: set complete path
+            }
 
     try:
         response = requests.post(
