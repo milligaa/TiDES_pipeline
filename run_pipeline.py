@@ -100,8 +100,8 @@ def run_pipeline(spectrum:str):
     ngsf_response = run_ngsf(spectrum, redshift)
 
     paths = {
-            "snid": snid_response["data"]["file_path"],
-            "dash": dash_response["data"]["file_path"],
+            "SNID": snid_response["data"]["file_path"],
+            "DASH": dash_response["data"]["file_path"],
             "NGSF": ngsf_response["data"]["file_path"]
             }
 

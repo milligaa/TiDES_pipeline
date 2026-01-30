@@ -33,7 +33,7 @@ def pipeline(paths, spec):
     #snid_res = Table.read(config_path+'/SNID_interim.csv', format='csv', delimiter=',')
 
     dash_res = DASH_output.DASH(spectrum=spec, redshift=None, filesave_path=None,
-                                dash_class=paths['dash'])
+                                dash_class=paths['DASH'])
     ngsf_res = NGSF_output.concatenate(csv_path=paths['NGSF'], save_path=None)
     snid_res = SNID_output.concatenate(pto=paths['SNID'], pts=spec, sp=None)
 
