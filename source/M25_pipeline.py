@@ -37,9 +37,14 @@ def pipeline(config_path, spec):
     if dash_res['Best_class'][0] in ['Ia', 'II']:
         if ngsf_res['Best_class'][0] == dash_res['Best_class'][0]:
             pipeline_class = ngsf_res['Best_class'][0]
-        elif rband_mag(spec) == True:
-            print(ngsf_res['Best_class'][0])
-            pipeline_class = ngsf_res['Best_class'][0]
+        else:
+            if rband_mag(spec) == True:
+                pipeline_class = ngsf_res['Best_class'][0]
+            else:
+                pipeline_class = 'Other'
+                
+    elif rband_mag(spec) == True:
+        pipeline_class = ngsf_res['Best_class'][0]
     else:
         pipeline_class = 'Other'
 
